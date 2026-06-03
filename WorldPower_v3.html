@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=5.0,user-scalable=yes">
+<title>World Power</title>
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Vazirmatn:wght@400;700&display=swap");
+:root{--g:#c9a84c;--g2:#f0d080;--dk:#0a0e1a;--dk2:#111827;--dk3:#1a2540;--gr:#22c55e;--rd:#ef4444;--bl:#3b82f6;--pn:rgba(8,12,24,0.97);}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{width:100%;height:100%;overflow:hidden;background:#0a0e1a;font-family:"Vazirmatn",sans-serif;color:#e2e8f0;user-select:none;}
+.sc{position:absolute;inset:0;display:none;flex-direction:column;}.sc.active{display:flex;}
+/* INTRO */
+#intro{background:radial-gradient(ellipse at 50% 40%,#1a2a4a,#0a0e1a);align-items:center;justify-content:center;}
+.it{font-family:"Cinzel",serif;font-size:clamp(2rem,8vw,5rem);font-weight:900;color:var(--g);letter-spacing:6px;text-align:center;animation:gp 3s ease-in-out infinite;}
+.is{font-family:"Cinzel",serif;color:rgba(201,168,76,.5);letter-spacing:8px;font-size:.9rem;margin-top:8px;text-align:center;}
+@keyframes gp{0%,100%{text-shadow:0 0 40px rgba(201,168,76,.5);}50%{text-shadow:0 0 100px rgba(201,168,76,.9);}}
+.sb{margin-top:50px;padding:14px 60px;background:linear-gradient(135deg,#c9a84c,#f0d080,#c9a84c);color:#000;font-family:"Cinzel",serif;font-size:1.1rem;font-weight:700;border:none;cursor:pointer;clip-path:polygon(12px 0%,100% 0%,calc(100% - 12px) 100%,0% 100%);letter-spacing:3px;}
+.sb:active{transform:scale(.96);}
+/* COUNTRY SELECT */
+#csel{background:var(--dk2);overflow:hidden;}
+.csh{padding:16px 20px 8px;text-align:center;flex-shrink:0;}
+.cst{font-family:"Cinzel",serif;color:var(--g);font-size:1.3rem;letter-spacing:2px;}
+.css{color:rgba(255,255,255,.4);font-size:.75rem;margin-top:4px;}
+.csb{flex:1;overflow-y:auto;padding:0 16px 16px;}
+.rl{color:var(--g2);font-size:.7rem;letter-spacing:3px;text-transform:uppercase;margin:14px 0 8px;padding-right:6px;border-right:3px solid var(--g);}
+.cg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.cc{background:var(--dk3);border:1px solid rgba(201,168,76,.15);border-radius:8px;padding:10px;cursor:pointer;display:flex;align-items:center;gap:8px;transition:all .15s;}
+.cc:active{transform:scale(.94);background:rgba(201,168,76,.12);}
+.cc.iran-card{border-color:rgba(201,168,76,.5);background:linear-gradient(135deg,rgba(201,168,76,.12),rgba(0,100,50,.08));}
+.cf{font-size:1.6rem;}.cn{font-weight:700;font-size:.85rem;}.cd{font-size:.65rem;color:rgba(255,255,255,.5);margin-top:2px;}
+/* GAME */
+#game{flex-direction:column;}
+.hud{display:flex;align-items:center;justify-content:space-between;padding:6px 12px;background:rgba(8,12,24,.98);border-bottom:1px solid rgba(201,168,76,.2);flex-shrink:0;height:58px;}
+.hl{display:flex;align-items:center;gap:8px;}
+.hfl{font-size:1.9rem;}
+.hcn{font-family:"Cinzel",serif;color:var(--g);font-size:.82rem;font-weight:700;}
+.hml{font-size:.6rem;color:rgba(255,255,255,.6);margin-top:2px;display:flex;gap:5px;}
+.hr{display:flex;gap:10px;align-items:center;}
+.hv{font-size:.88rem;font-weight:700;}
+.mc{color:var(--g);}.oc{color:#60a5fa;}
+.hset{background:transparent;border:1px solid rgba(201,168,76,.3);border-radius:6px;color:var(--g);width:28px;height:28px;cursor:pointer;font-size:.85rem;display:flex;align-items:center;justify-content:center;}
+/* MAP */
+.mc2{flex:1;overflow:hidden;position:relative;background:#060e1e;}
+.mw{width:100%;height:100%;overflow:hidden;cursor:grab;position:relative;}
+.mw:active{cursor:grabbing;}
+#msvg{width:100%;height:100%;display:block;transform-origin:0 0;}
+/* BOTTOM NAV */
+.bb{display:flex;background:rgba(8,12,24,.98);border-top:1px solid rgba(201,168,76,.2);flex-shrink:0;}
+.nb{flex:1;padding:7px 2px;background:transparent;border:none;color:rgba(255,255,255,.45);font-size:.52rem;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;font-family:"Vazirmatn",sans-serif;transition:color .2s;position:relative;}
+.nb .ni{font-size:1.1rem;}.nb.active{color:var(--g);}.nb:active{background:rgba(201,168,76,.08);}
+.rbg{position:absolute;top:3px;right:calc(50% - 14px);background:var(--rd);color:#fff;border-radius:50%;width:14px;height:14px;font-size:.55rem;display:flex;align-items:center;justify-content:center;font-weight:700;}
+/* PANELS */
+.pl{position:fixed;bottom:0;left:0;right:0;background:var(--pn);border-top:1px solid rgba(201,168,76,.25);border-radius:18px 18px 0 0;z-index:200;transform:translateY(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);max-height:76vh;display:flex;flex-direction:column;}
+.pl.open{transform:translateY(0);}
+.ph{width:36px;height:4px;background:rgba(255,255,255,.18);border-radius:2px;margin:12px auto 4px;flex-shrink:0;}
+.phd{display:flex;align-items:center;justify-content:center;padding:4px 16px 10px;flex-shrink:0;position:relative;}
+.pt{font-family:"Cinzel",serif;color:var(--g);font-size:1rem;letter-spacing:2px;}
+.pc{position:absolute;left:16px;background:transparent;border:none;color:rgba(255,255,255,.4);font-size:1.1rem;cursor:pointer;padding:4px;}
+.pb{overflow-y:auto;padding:0 14px 16px;flex:1;}
+/* SHOP */
+.stabs{display:flex;gap:4px;background:var(--dk3);border-radius:8px;padding:4px;margin-bottom:12px;}
+.stab{flex:1;padding:7px;border:none;background:transparent;color:rgba(255,255,255,.5);font-size:.66rem;cursor:pointer;border-radius:6px;font-family:"Vazirmatn",sans-serif;transition:all .2s;}
+.stab.active{background:var(--g);color:#000;font-weight:700;}
+.si{background:var(--dk3);border:1px solid rgba(201,168,76,.12);border-radius:10px;padding:11px;display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.si.owned{border-color:var(--gr);}.si.upg{border-color:#f59e0b;}
+.sic{font-size:1.7rem;width:40px;text-align:center;}.sin{font-weight:700;font-size:.82rem;}
+.sid{font-size:.65rem;color:rgba(255,255,255,.45);margin-top:2px;}
+.sip{color:var(--g);font-size:.78rem;font-weight:700;margin-top:3px;}
+.sil{color:#f59e0b;font-size:.65rem;margin-top:2px;}
+.sio{color:var(--gr);font-size:.68rem;}
+.bb2{padding:7px 12px;background:linear-gradient(135deg,var(--g),var(--g2));color:#000;border:none;border-radius:8px;font-weight:700;font-size:.72rem;cursor:pointer;font-family:"Vazirmatn",sans-serif;white-space:nowrap;}
+.bb2:disabled{background:#2a2a2a;color:#555;cursor:not-allowed;}
+.ub{padding:7px 10px;background:linear-gradient(135deg,#f59e0b,#fcd34d);color:#000;border:none;border-radius:8px;font-weight:700;font-size:.65rem;cursor:pointer;font-family:"Vazirmatn",sans-serif;white-space:nowrap;}
+/* DIPLO */
+.di{background:var(--dk3);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.dfl{font-size:1.5rem;}.din{font-weight:700;font-size:.82rem;}.drl{font-size:.65rem;margin-top:2px;}
+.rff{color:var(--gr);}.rfn{color:#facc15;}.rfe{color:var(--rd);}
+.dbs{display:flex;gap:4px;flex-wrap:wrap;}
+.db{padding:5px 8px;border:1px solid;border-radius:6px;background:transparent;font-size:.6rem;cursor:pointer;font-family:"Vazirmatn",sans-serif;}
+.db:active{transform:scale(.92);}
+.db.oil{border-color:#60a5fa;color:#60a5fa;}.db.trd{border-color:var(--g);color:var(--g);}
+.db.aly{border-color:var(--gr);color:var(--gr);}.db.atk{border-color:var(--rd);color:var(--rd);}
+.db.unaly{border-color:#f97316;color:#f97316;}.db.rq{border-color:#a78bfa;color:#a78bfa;}
+/* STATS */
+.sg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;}
+.sc2{background:var(--dk3);border-radius:10px;padding:12px;text-align:center;}
+.sci{font-size:1.4rem;margin-bottom:4px;}.scv{font-size:.95rem;font-weight:700;}.scl{font-size:.6rem;color:rgba(255,255,255,.45);margin-top:2px;}
+.bw{margin:6px 0;}.bl2{display:flex;justify-content:space-between;font-size:.7rem;margin-bottom:3px;}
+.bt{height:5px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden;}
+.bf{height:100%;border-radius:3px;transition:width .5s;}
+/* VAULT */
+.vb{background:linear-gradient(135deg,rgba(201,168,76,.1),rgba(59,130,246,.08));border:1px solid rgba(201,168,76,.25);border-radius:12px;padding:14px;margin-bottom:14px;}
+.vt{font-family:"Cinzel",serif;color:var(--g);font-size:.85rem;margin-bottom:10px;text-align:center;}
+.vr{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.vi{font-size:.78rem;}.vs{color:var(--g2);font-size:.7rem;margin-top:2px;}
+.vbs{display:flex;gap:6px;}
+.vbn{padding:6px 10px;border:none;border-radius:7px;font-size:.68rem;cursor:pointer;font-family:"Vazirmatn",sans-serif;font-weight:700;}
+.vd{background:var(--gr);color:#000;}.vw{background:rgba(239,68,68,.15);color:var(--rd);border:1px solid var(--rd);}
+/* REQUESTS */
+.ri{background:linear-gradient(135deg,rgba(201,168,76,.08),rgba(59,130,246,.05));border:1px solid rgba(201,168,76,.2);border-radius:10px;padding:12px;margin-bottom:8px;}
+.rih{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.rfl{font-size:1.4rem;}.rfm{font-size:.8rem;font-weight:700;}
+.rm{font-size:.72rem;color:rgba(255,255,255,.7);line-height:1.5;margin-bottom:10px;}
+.rbs{display:flex;gap:8px;}
+.ra{padding:7px 16px;background:var(--gr);color:#000;border:none;border-radius:8px;font-weight:700;font-size:.72rem;cursor:pointer;font-family:"Vazirmatn",sans-serif;}
+.rj{padding:7px 16px;background:rgba(239,68,68,.15);color:var(--rd);border:1px solid var(--rd);border-radius:8px;font-size:.72rem;cursor:pointer;font-family:"Vazirmatn",sans-serif;}
+/* SETTINGS */
+.sti{color:var(--g);font-size:.8rem;margin-bottom:8px;margin-top:14px;letter-spacing:1px;}
+.sro{display:flex;align-items:center;justify-content:space-between;background:var(--dk3);border-radius:8px;padding:12px 14px;margin-bottom:6px;}
+.sla{font-size:.8rem;}.sde{font-size:.65rem;color:rgba(255,255,255,.4);margin-top:2px;}
+.tg{width:44px;height:24px;background:#333;border-radius:12px;cursor:pointer;position:relative;transition:background .3s;border:none;flex-shrink:0;}
+.tg.on{background:var(--gr);}.tg::after{content:"";position:absolute;top:2px;left:2px;width:20px;height:20px;background:#fff;border-radius:50%;transition:left .3s;}
+.tg.on::after{left:22px;}
+.vsl{width:110px;accent-color:var(--g);cursor:pointer;}
+/* POPUP */
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:300;display:none;}
+.ov.show{display:block;}
+.pp{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.85);background:var(--pn);border:1px solid rgba(201,168,76,.3);border-radius:16px;padding:18px;z-index:301;width:min(340px,88vw);opacity:0;pointer-events:none;transition:all .2s;}
+.pp.show{transform:translate(-50%,-50%) scale(1);opacity:1;pointer-events:all;}
+.ppc{position:absolute;top:12px;left:12px;background:transparent;border:none;color:rgba(255,255,255,.4);font-size:1rem;cursor:pointer;}
+.rf{background:var(--dk3);border-radius:10px;padding:12px;margin-top:10px;}
+.rft{font-size:.75rem;color:var(--g2);margin-bottom:7px;}
+.rsl,.ri2{width:100%;background:var(--dk);border:1px solid rgba(201,168,76,.2);border-radius:6px;color:#fff;padding:7px 10px;font-size:.75rem;font-family:"Vazirmatn",sans-serif;margin-bottom:8px;}
+.rsb{width:100%;padding:9px;background:linear-gradient(135deg,#7c3aed,#a78bfa);color:#fff;border:none;border-radius:8px;font-weight:700;font-size:.78rem;cursor:pointer;font-family:"Vazirmatn",sans-serif;}
+/* NOTIF */
+.nf{position:fixed;top:65px;left:50%;transform:translateX(-50%) translateY(-10px);background:rgba(10,14,26,.95);border:1px solid var(--g);border-radius:8px;padding:9px 18px;font-size:.76rem;color:var(--g2);z-index:500;opacity:0;transition:all .3s;pointer-events:none;text-align:center;max-width:88vw;}
+.nf.show{opacity:1;transform:translateX(-50%) translateY(0);}
+/* MAP CONTROLS */
+.zb{position:absolute;bottom:10px;left:10px;display:flex;flex-direction:column;gap:4px;z-index:100;}
+.zbn{width:30px;height:30px;background:rgba(10,14,26,.85);border:1px solid rgba(201,168,76,.3);color:var(--g);border-radius:6px;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.db2{position:absolute;bottom:10px;right:10px;background:rgba(10,14,26,.85);border:1px solid rgba(201,168,76,.2);border-radius:8px;padding:4px 10px;font-size:.68rem;color:rgba(255,255,255,.5);z-index:100;}
+.spc{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);background:rgba(10,14,26,.85);border:1px solid rgba(201,168,76,.2);border-radius:8px;padding:4px 10px;font-size:.62rem;color:rgba(255,255,255,.5);z-index:100;display:flex;align-items:center;gap:5px;}
+.spb{background:transparent;border:1px solid rgba(201,168,76,.3);color:var(--g);border-radius:4px;padding:2px 7px;cursor:pointer;font-size:.62rem;}
+.spb.active{background:rgba(201,168,76,.2);}
+/* IRAN HIGHLIGHT */
+.iran-popup-header{background:linear-gradient(135deg,rgba(0,100,50,.3),rgba(201,168,76,.15));border-radius:10px;padding:10px;margin-bottom:12px;text-align:center;}
+::-webkit-scrollbar{width:3px;}::-webkit-scrollbar-thumb{background:rgba(201,168,76,.3);border-radius:2px;}
+</style>
+</head>
+<body>
+
+<!-- INTRO -->
+<div id="intro" class="sc active">
+  <div class="it">WORLD POWER</div>
+  <div class="is">GLOBAL STRATEGY</div>
+  <button class="sb" onclick="showCS();pCk()">START GAME</button>
+</div>
+
+<!-- COUNTRY SELECT -->
+<div id="csel" class="sc">
+  <div class="csh"><div class="cst">انتخاب کشور</div><div class="css">🇮🇷 ایران = قدرتمندترین در این بازی</div></div>
+  <div class="csb" id="csList"></div>
+</div>
+
+<!-- GAME -->
+<div id="game" class="sc">
+  <div class="hud">
+    <div class="hl">
+      <div class="hfl" id="hFl"></div>
+      <div>
+        <div class="hcn" id="hNm"></div>
+        <div class="hml"><span id="hMis">🚀0</span><span id="hJet">✈️0</span><span id="hDrn">🛸0</span></div>
+      </div>
+    </div>
+    <div class="hr">
+      <div><span>💸</span><span class="hv mc" id="hMon">۰</span></div>
+      <div><span>🛢️</span><span class="hv oc" id="hOil">۰</span></div>
+      <button class="hset" onclick="swTab('settings');pCk()">⚙️</button>
+    </div>
+  </div>
+
+  <div class="mc2">
+    <div class="mw" id="mapW">
+      <svg id="msvg" viewBox="0 0 1010 550" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="bg" cx="50%" cy="50%" r="70%"><stop offset="0%" style="stop-color:#0d1f3c"/><stop offset="100%" style="stop-color:#060e1e"/></radialGradient>
+          <filter id="glow"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <filter id="glow2"><feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        </defs>
+        <rect width="1010" height="550" fill="url(#bg)"/>
+        <g stroke="rgba(255,255,255,0.025)" stroke-width="0.5">
+          <line x1="0" y1="137" x2="1010" y2="137"/><line x1="0" y1="275" x2="1010" y2="275"/>
+          <line x1="0" y1="412" x2="1010" y2="412"/><line x1="252" y1="0" x2="252" y2="550"/>
+          <line x1="505" y1="0" x2="505" y2="550"/><line x1="757" y1="0" x2="757" y2="550"/>
+        </g>
+        <g id="mapG">
+        <path id="c-canada" d="M68,40 L220,30 L250,55 L240,90 L200,100 L170,85 L130,95 L100,88 L88,55 Z" fill="#1a3a5c" stroke="#2d5a8e" stroke-width="0.8" style="cursor:pointer"/>
+        <path id="c-usa" d="M88,95 L200,90 L240,90 L248,115 L230,130 L195,135 L165,140 L140,145 L110,140 L85,130 L75,115 Z" fill="#1a3a5c" stroke="#2d5a8e" stroke-width="0.8" style="cursor:pointer"/>
+        <path id="c-mexico" d="M85,130 L140,140 L155,155 L145,175 L125,185 L100,180 L80,165 L75,150 Z" fill="#1a3a5c" stroke="#2d5a8e" stroke-width="0.8" style="cursor:pointer"/>
+        <path id="c-venezuela" d="M148,210 L190,200 L210,215 L205,240 L175,248 L150,238 L140,220 Z" fill="#1a3a5c" stroke="#2d5a8e" stroke-width="0.7" style="cursor:pointer"/>
+        <path id="c-brazil" d="M155,240 L210,235 L240,248 L258,280 L255,320 L230,345 L200,350 L175,340 L158,310 L148,280 Z" fill="#1a3a5c" stroke="#2d5a8e" stroke-width="0.8" style="cursor:pointer"/>
+        <path id="c-argentina" d="M148,310 L175,305 L178,355 L165,400 L150,420 L138,400 L135,360 Z" fill="#1a3a5c" stroke="#2d5a8e" stroke-width="0.7" style="cursor:pointer"/>
+        <path id="c-uk" d="M410,72 L424,68 L430,82 L422,92 L410,88 Z" fill="#1a3a5c" stroke="#2d5a8e" stroke-width="0.7" style="cursor:pointer"/>
+        <path id="c-scandinavia" d="M445,40 L480,35 L488,55 L480,70 L462,72 L448,62 Z" fill="#1a3a5c" stroke="#2d5a8e" stroke-width="0.7" style="cursor:pointer"/>
+        <path id="c-france" d="M424,90 L450,85 L460,100 L455,118 L435,122 L420,110 Z" fill="#1a3a5c" stroke="#2d5a8e" stroke-width="0.7" style="cursor:pointer"/>
+        <path id="c-spain" d="M398,110 L438,105 L440,125 L420,135 L398,130 L390,118 Z" fill="#1a3a5c" stroke="#2d5a8e" stroke-width="0.7" style="cursor:pointer"/>
+        <path id="c-germany" d="M450,80 L475,78 L482,98 L465,105 L452,100 Z" fill="#1a3a5c" stroke="#2d5a8e" stroke-width="0.7" style="cursor:pointer"/>
+        <path id="c-italy" d="M455,100 L472,96 L478,120 L468,145 L458,138 L452,115 Z" fill="#1a3a5c" stroke="#2d5a8e" stroke-width="0.7" style="cursor:pointer"/>
+        <path id="c-ukraine" d="M498,78 L545,75 L550,100 L528,108 L505,105 Z" fill="#1a3a5c" stroke="#2d5a8e" stroke-width="0.7" style="cursor:pointer"/>
+        <path id="c-russia" d="M510,30 L760,25 L800,40 L820,65 L800,85 L760,88 L700,90 L650,88 L600,90 L555,88 L530,80 L510,65 Z" fill="#1a3a5c" stroke="#2d5a8e" stroke-width="0.9" style="cursor:pointer"/>
+        <path id="c-turkey" d="M508,108 L558,104 L565,120 L545,130 L510,128 Z" fill="#1a3a5c" stroke="#2d5a8e" stroke-width="0.7" style="cursor:pointer"/>
+        <path id="c-iraq" d="M560,128 L590,125 L598,150 L580,165 L558,160 L552,142 Z" fill="#1a3a5c" stroke="#2d5a8e" stroke-width="0.7" style="cursor:pointer"/>
+        <path id="c-iran" d="M592,118 L645,112 L660,128 L658,158 L635,172 L600,168 L580,155 L590,130 Z" fill="#1a3a5c" stroke="#2d5a8e" stroke-width="0.8" style="cursor:pointer"/>
+        <path id="c-saudi" d="M548,158 L600,152 L610,172 L600,200 L572,215 L548,208 L535,185 Z" fill="#1a3a5c" stroke="#2d5a8e" stroke-width="0.8" style="cursor:pointer"/>
+        <path id="c-uae" d="M600,168 L625,165 L632,185 L615,198 L600,190 Z" fill="#1a3a5c" stroke="#2d5a8e" stroke-width="0.6" style="cursor:pointer"/>
+        <path id="c-israel" d="M535,140 L550,138 L552,155 L536,158 Z" fill="#1a3a5c" stroke="#2d5a8e" stroke-width="0.6" style="cursor:pointer"/>
+        <path id="c-egypt" d="M498,132 L528,128 L535,155 L520,168 L500,165 Z" fill="#1a3a5c" stroke="#2d5a8e" stroke-width="0.7" style="cursor:pointer"/>
+        <path id="c-kazakhstan" d="M600,85 L680,80 L692,100 L688,125 L660,130 L625,128 L600,115 Z" fill="#1a3a5c" stroke="#2d5a8e" stroke-width="0.7" style="cursor:pointer"/>
+        <path id="c-pakistan" d="M658,138 L695,130 L705,155 L690,172 L665,170 L655,155 Z" fill="#1a3a5c" stroke="#2d5a8e" stroke-width="0.7" style="cursor:pointer"/>
+        <path id="c-india" d="M668,155 L715,148 L725,170 L718,210 L698,235 L675,240 L658,215 L655,185 Z" fill="#1a3a5c" stroke="#2d5a8e" stroke-width="0.8" style="cursor:pointer"/>
+        <path id="c-china" d="M695,80 L800,75 L825,90 L838,115 L825,145 L798,158 L758,162 L720,160 L698,145 L688,120 Z" fill="#1a3a5c" stroke="#2d5a8e" stroke-width="0.9" style="cursor:pointer"/>
+        <path id="c-northkorea" d="M825,100 L848,96 L852,112 L832,118 Z" fill="#1a3a5c" stroke="#2d5a8e" stroke-width="0.6" style="cursor:pointer"/>
+        <path id="c-southkorea" d="M832,112 L848,110 L850,126 L834,128 Z" fill="#1a3a5c" stroke="#2d5a8e" stroke-width="0.6" style="cursor:pointer"/>
+        <path id="c-japan" d="M855,92 L875,88 L882,110 L870,120 L855,112 Z" fill="#1a3a5c" stroke="#2d5a8e" stroke-width="0.7" style="cursor:pointer"/>
+        <path id="c-vietnam" d="M748,170 L775,165 L782,195 L765,212 L745,208 L740,188 Z" fill="#1a3a5c" stroke="#2d5a8e" stroke-width="0.7" style="cursor:pointer"/>
+        <path id="c-indonesia" d="M748,250 L820,242 L855,248 L858,265 L830,272 L788,268 L750,265 Z" fill="#1a3a5c" stroke="#2d5a8e" stroke-width="0.7" style="cursor:pointer"/>
+        <path id="c-nigeria" d="M448,208 L490,202 L498,235 L475,250 L448,245 L440,228 Z" fill="#1a3a5c" stroke="#2d5a8e" stroke-width="0.7" style="cursor:pointer"/>
+        <path id="c-ethiopia" d="M532,205 L572,198 L582,225 L560,245 L535,240 L525,222 Z" fill="#1a3a5c" stroke="#2d5a8e" stroke-width="0.7" style="cursor:pointer"/>
+        <path id="c-southafrica" d="M468,345 L518,338 L528,370 L510,395 L485,400 L462,382 L458,362 Z" fill="#1a3a5c" stroke="#2d5a8e" stroke-width="0.8" style="cursor:pointer"/>
+        <path id="c-australia" d="M760,288 L850,278 L880,295 L892,330 L880,365 L848,380 L808,385 L775,375 L755,352 L748,318 Z" fill="#1a3a5c" stroke="#2d5a8e" stroke-width="0.8" style="cursor:pointer"/>
+        <path id="c-algeria" d="M418,138 L455,135 L462,165 L445,180 L420,178 L416,160 Z" fill="#1a3a5c" stroke="#2d5a8e" stroke-width="0.7" style="cursor:pointer"/>
+        <path id="c-libya" d="M455,135 L498,132 L505,160 L488,178 L462,175 Z" fill="#1a3a5c" stroke="#2d5a8e" stroke-width="0.7" style="cursor:pointer"/>
+        <path id="c-sudan" d="M498,165 L535,158 L542,195 L525,215 L498,218 L488,200 Z" fill="#1a3a5c" stroke="#2d5a8e" stroke-width="0.7" style="cursor:pointer"/>
+        <path id="c-congo" d="M480,248 L525,242 L535,278 L520,305 L490,308 L472,285 Z" fill="#1a3a5c" stroke="#2d5a8e" stroke-width="0.7" style="cursor:pointer"/>
+        </g>
+        <g id="animL"></g>
+      </svg>
+      <div id="htmlOv" style="position:absolute;inset:0;pointer-events:none;"></div>
+    </div>
+    <div class="zb">
+      <button class="zbn" onclick="dZ(1.3);pCk()">+</button>
+      <button class="zbn" onclick="dZ(0.77);pCk()">−</button>
+      <button class="zbn" onclick="rZ();pCk()" style="font-size:.62rem">↺</button>
+    </div>
+    <div class="db2" id="dayB">روز ۱</div>
+    <div class="spc">
+      <span>سرعت:</span>
+      <button class="spb active" id="sp1" onclick="setSp(1)">۱×</button>
+      <button class="spb" id="sp2" onclick="setSp(2)">۲×</button>
+      <button class="spb" id="sp0" onclick="setSp(0)">⏸</button>
+    </div>
+  </div>
+
+  <div class="bb">
+    <button class="nb active" onclick="swTab('map')" id="tab-map"><span class="ni">🗺️</span>نقشه</button>
+    <button class="nb" onclick="swTab('shop')" id="tab-shop"><span class="ni">🏪</span>فروشگاه</button>
+    <button class="nb" onclick="swTab('diplo')" id="tab-diplo"><span class="ni">🤝</span>دیپلماسی</button>
+    <button class="nb" onclick="swTab('stats')" id="tab-stats"><span class="ni">📊</span>آمار</button>
+    <button class="nb" onclick="swTab('req')" id="tab-req"><span class="ni">📨</span><span class="rbg" id="rbg" style="display:none">0</span>درخواست</button>
+    <button class="nb" onclick="swTab('settings')" id="tab-settings"><span class="ni">⚙️</span>تنظیمات</button>
+  </div>
+</div>
+
+<!-- PANELS -->
+<div id="shopPl" class="pl"><div class="ph"></div><div class="phd"><button class="pc" onclick="clPl()">✕</button><div class="pt">🏪 فروشگاه</div></div><div class="pb"><div class="stabs"><button class="stab active" onclick="swSh('fac');pCk()">امکانات</button><button class="stab" onclick="swSh('wpn');pCk()">سلاح</button><button class="stab" onclick="swSh('def');pCk()">پدافند</button></div><div id="shIt"></div></div></div>
+<div id="diploPl" class="pl"><div class="ph"></div><div class="phd"><button class="pc" onclick="clPl()">✕</button><div class="pt">🤝 دیپلماسی</div></div><div class="pb" id="diploB"></div></div>
+<div id="statsPl" class="pl"><div class="ph"></div><div class="phd"><button class="pc" onclick="clPl()">✕</button><div class="pt">📊 آمار</div></div><div class="pb" id="statsB"></div></div>
+<div id="reqPl" class="pl"><div class="ph"></div><div class="phd"><button class="pc" onclick="clPl()">✕</button><div class="pt">📨 درخواست‌ها</div></div><div class="pb" id="reqB"></div></div>
+<div id="settPl" class="pl"><div class="ph"></div><div class="phd"><button class="pc" onclick="clPl()">✕</button><div class="pt">⚙️ تنظیمات</div></div><div class="pb" id="settB"></div></div>
+<div class="ov" id="ov" onclick="clPop()"></div>
+<div class="pp" id="pp"><button class="ppc" onclick="clPop()">✕</button><div id="ppB"></div></div>
+<div class="nf" id="nf"></div>
+
+<script>
+// ===== AUDIO =====
+const AC=new(window.AudioContext||window.webkitAudioContext)();
+let SFX={on:true,vol:0.45};
+function uAC(){if(AC.state==="suspended")AC.resume();}
+document.addEventListener("touchstart",uAC,{once:true});
+document.addEventListener("click",uAC,{once:true});
+function tn(f,d,tp="sine",v=0.3,dl=0){if(!SFX.on)return;try{const o=AC.createOscillator(),g=AC.createGain();o.connect(g);g.connect(AC.destination);o.type=tp;o.frequency.value=f;const t=AC.currentTime+dl;g.gain.setValueAtTime(v*SFX.vol,t);g.gain.exponentialRampToValueAtTime(0.001,t+d);o.start(t);o.stop(t+d);}catch(e){}}
+function pCk(){tn(820,0.04,"sine",0.1);}
+function pShip(){if(!SFX.on)return;tn(108,0.9,"sawtooth",0.1);tn(162,0.65,"sine",0.07,0.12);tn(80,1.1,"sawtooth",0.05,0.35);}
+function pMis(){if(!SFX.on)return;try{const b=AC.createBuffer(1,AC.sampleRate*0.55,AC.sampleRate),d=b.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*Math.exp(-i/d.length*4);const s=AC.createBufferSource(),g=AC.createGain(),f=AC.createBiquadFilter();f.type="bandpass";f.frequency.value=1100;s.buffer=b;s.connect(f);f.connect(g);g.connect(AC.destination);g.gain.value=0.2*SFX.vol;s.start();}catch(e){}setTimeout(()=>{try{const b=AC.createBuffer(1,AC.sampleRate*0.3,AC.sampleRate),d=b.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*Math.exp(-i/(d.length*0.25));const s=AC.createBufferSource(),g=AC.createGain();s.buffer=b;s.connect(g);g.connect(AC.destination);g.gain.value=0.25*SFX.vol;s.start();}catch(e){}},560);}
+function pJet(){if(!SFX.on)return;[280,560,840].forEach((f,i)=>tn(f,0.5,"sawtooth",0.07,i*0.04));tn(200,0.7,"triangle",0.09);}
+function pDrn(){if(!SFX.on)return;[120,240,360].forEach((f,i)=>tn(f,0.85,"square",0.055,i*0.02));}
+function pBuy(){if(!SFX.on)return;[523,659,784].forEach((f,i)=>tn(f,0.15,"sine",0.18,i*0.1));}
+function pWar(){if(!SFX.on)return;tn(80,0.3,"sawtooth",0.18);setTimeout(()=>tn(60,0.4,"sawtooth",0.12),200);}
+
+// ===== FORMAT =====
+const fR=v=>{if(v>=1e12)return(v/1e12).toFixed(1)+"T";if(v>=1e9)return(v/1e9).toFixed(1)+"B";if(v>=1e6)return(v/1e6).toFixed(1)+"M";if(v>=1e3)return(v/1e3).toFixed(0)+"K";return Math.floor(v)+"";};
+const fRial=v=>fR(v)+" تومان";
+const fOil=v=>v>=1e9?(v/1e9).toFixed(1)+"B L":v>=1e6?(v/1e6).toFixed(1)+"M L":v>=1000?(v/1000).toFixed(0)+"K L":Math.floor(v)+"L";
+
+// ===== COUNTRY DATA =====
+// Iran = special: more oil, more money, more defense, more respect
+const CD={
+  iran:{name:"ایران",flag:"🇮🇷",oil:50e9,money:800e9,happy:72,def:7,cx:622,cy:140,special:true},
+  saudi:{name:"عربستان",flag:"🇸🇦",oil:40e9,money:500e9,happy:58,def:4,cx:573,cy:182},
+  iraq:{name:"عراق",flag:"🇮🇶",oil:20e9,money:150e9,happy:45,def:3,cx:572,cy:145},
+  uae:{name:"امارات",flag:"🇦🇪",oil:12e9,money:400e9,happy:75,def:2,cx:612,cy:180},
+  turkey:{name:"ترکیه",flag:"🇹🇷",oil:2e9,money:220e9,happy:62,def:3,cx:535,cy:117},
+  israel:{name:"اسرائیل",flag:"🇮🇱",oil:1e9,money:350e9,happy:70,def:4,cx:542,cy:148},
+  russia:{name:"روسیه",flag:"🇷🇺",oil:45e9,money:600e9,happy:55,def:7,cx:660,cy:58},
+  china:{name:"چین",flag:"🇨🇳",oil:15e9,money:700e9,happy:70,def:7,cx:762,cy:118},
+  india:{name:"هند",flag:"🇮🇳",oil:8e9,money:350e9,happy:60,def:5,cx:692,cy:192},
+  japan:{name:"ژاپن",flag:"🇯🇵",oil:1e9,money:800e9,happy:85,def:3,cx:866,cy:104},
+  pakistan:{name:"پاکستان",flag:"🇵🇰",oil:4e9,money:80e9,happy:40,def:3,cx:678,cy:152},
+  kazakhstan:{name:"قزاقستان",flag:"🇰🇿",oil:14e9,money:130e9,happy:52,def:3,cx:644,cy:105},
+  usa:{name:"آمریکا",flag:"🇺🇸",oil:20e9,money:1500e9,happy:80,def:7,cx:162,cy:115},
+  canada:{name:"کانادا",flag:"🇨🇦",oil:18e9,money:800e9,happy:82,def:4,cx:158,cy:65},
+  uk:{name:"انگلیس",flag:"🇬🇧",oil:4e9,money:900e9,happy:78,def:3,cx:418,cy:80},
+  france:{name:"فرانسه",flag:"🇫🇷",oil:2e9,money:850e9,happy:75,def:4,cx:440,cy:104},
+  germany:{name:"آلمان",flag:"🇩🇪",oil:1e9,money:1000e9,happy:80,def:4,cx:463,cy:90},
+  brazil:{name:"برزیل",flag:"🇧🇷",oil:15e9,money:350e9,happy:62,def:5,cx:202,cy:292},
+  nigeria:{name:"نیجریه",flag:"🇳🇬",oil:30e9,money:100e9,happy:38,def:3,cx:468,cy:228},
+  southafrica:{name:"آفریقای جنوبی",flag:"🇿🇦",oil:4e9,money:180e9,happy:50,def:3,cx:492,cy:368},
+  australia:{name:"استرالیا",flag:"🇦🇺",oil:8e9,money:650e9,happy:83,def:4,cx:818,cy:332},
+  egypt:{name:"مصر",flag:"🇪🇬",oil:6e9,money:140e9,happy:48,def:3,cx:512,cy:148},
+  indonesia:{name:"اندونزی",flag:"🇮🇩",oil:7e9,money:250e9,happy:58,def:3,cx:800,cy:255},
+  argentina:{name:"آرژانتین",flag:"🇦🇷",oil:5e9,money:160e9,happy:52,def:3,cx:152,cy:362},
+  mexico:{name:"مکزیک",flag:"🇲🇽",oil:6e9,money:200e9,happy:55,def:3,cx:110,cy:158},
+  venezuela:{name:"ونزوئلا",flag:"🇻🇪",oil:25e9,money:90e9,happy:35,def:2,cx:172,cy:222},
+  ukraine:{name:"اوکراین",flag:"🇺🇦",oil:2e9,money:160e9,happy:42,def:3,cx:520,cy:88},
+  northkorea:{name:"کره شمالی",flag:"🇰🇵",oil:0.5e9,money:20e9,happy:30,def:4,cx:838,cy:108},
+  algeria:{name:"الجزایر",flag:"🇩🇿",oil:10e9,money:120e9,happy:48,def:2,cx:436,cy:155},
+  libya:{name:"لیبی",flag:"🇱🇾",oil:12e9,money:100e9,happy:40,def:2,cx:476,cy:150},
+  sudan:{name:"سودان",flag:"🇸🇩",oil:5e9,money:60e9,happy:35,def:2,cx:515,cy:192},
+  ethiopia:{name:"اتیوپی",flag:"🇪🇹",oil:1e9,money:55e9,happy:38,def:2,cx:553,cy:222},
+  congo:{name:"کنگو",flag:"🇨🇩",oil:3e9,money:50e9,happy:32,def:2,cx:500,cy:275},
+};
+
+// ===== SHOP DATA =====
+// Prices in Toman (lower than before)
+const SHOP={
+  fac:[
+    {id:"port",name:"بندر دریایی",icon:"⚓",desc:"درآمد نفت +۲۵٪",price:100e9,upg:[{name:"بندر پیشرفته",price:180e9,desc:"+۵۰٪"},{name:"بندر بزرگ",price:300e9,desc:"+۸۰٪"}]},
+    {id:"refinery",name:"پالایشگاه",icon:"🏭",desc:"ظرفیت نفت +۵۰٪",price:150e9,upg:[{name:"پالایشگاه ملی",price:250e9,desc:"+۱۰۰٪"}]},
+    {id:"mall",name:"مرکز خرید",icon:"🏬",desc:"رضایت +۱۰",price:80e9,upg:[{name:"مگامال",price:150e9,desc:"+۲۰"}]},
+    {id:"hospital",name:"بیمارستان",icon:"🏥",desc:"رضایت +۱۵",price:120e9,upg:[{name:"بیمارستان تخصصی",price:220e9,desc:"+۳۰"}]},
+    {id:"university",name:"دانشگاه",icon:"🎓",desc:"درآمد +۲۰٪",price:180e9,upg:[{name:"مرکز تحقیقاتی",price:300e9,desc:"+۴۰٪"}]},
+    {id:"oilwell",name:"چاه نفت",icon:"🛢️",desc:"تولید ۲×",price:200e9,upg:[{name:"چاه عمیق",price:350e9,desc:"۳×"},{name:"میدان نفتی",price:600e9,desc:"۵×"}]},
+  ],
+  wpn:[
+    {id:"m1",name:"موشک کوتاه‌برد",icon:"🚀",desc:"برد ۵۰۰km | +۸ موشک",price:120e9,mis:8,upg:[{name:"موشک کروز",price:220e9,desc:"+۱۲ موشک",mis:12}]},
+    {id:"m2",name:"موشک میان‌برد",icon:"💫",desc:"برد ۲۰۰۰km | +۸",price:250e9,mis:8,upg:[{name:"موشک دوربرد",price:450e9,desc:"+۱۵",mis:15}]},
+    {id:"m3",name:"موشک بالستیک",icon:"☄️",desc:"برد جهانی | +۱۰",price:600e9,mis:10,upg:[]},
+    {id:"j1",name:"جت F-4",icon:"✈️",desc:"+۵ جت جنگی",price:180e9,jets:5,upg:[{name:"جت F-16",price:350e9,desc:"+۸ جت",jets:8}]},
+    {id:"j2",name:"جت F-16",icon:"🛩️",desc:"+۵ جت پیشرفته",price:350e9,jets:5,upg:[{name:"نسل ۵",price:800e9,desc:"+۸",jets:8}]},
+    {id:"d1",name:"پهباد شناسایی",icon:"🚁",desc:"+۱۰ پهباد شناسایی",price:100e9,drones:10,upg:[{name:"پهباد مسلح",price:200e9,desc:"+۱۵",drones:15}]},
+    {id:"d2",name:"پهباد انتحاری",icon:"💥",desc:"+۱۰ پهباد هجومی",price:200e9,drones:10,upg:[{name:"پهباد پیشرفته",price:380e9,desc:"+۱۵",drones:15}]},
+    {id:"d3",name:"پهباد شاهد",icon:"🛸",desc:"+۱۵ پهباد مانور",price:280e9,drones:15,upg:[]},
+  ],
+  def:[
+    {id:"pd1",name:"پدافند پایه",icon:"🛡️",desc:"خنثی ۳۵٪ حملات",price:100e9,dlvl:1,upg:[{name:"پدافند متوسط",price:200e9,desc:"۵۵٪",dlvl:2}]},
+    {id:"pd2",name:"سامانه S-300",icon:"🗼",desc:"خنثی ۷۰٪ حملات",price:300e9,dlvl:2,upg:[{name:"S-400",price:550e9,desc:"۸۵٪",dlvl:3}]},
+    {id:"pd3",name:"گنبد آهنین",icon:"🔵",desc:"خنثی ۹۲٪ حملات",price:700e9,dlvl:3,upg:[]},
+  ]
+};
+
+// ===== GAME STATE =====
+const MAX_MONEY=5000e9; // 5000 billion toman max
+let G={
+  pid:null,day:1,cs:{},al:[],owned:{},upg:{},
+  mis:0,jets:0,drones:0,defLvl:0,
+  vault:{m:0,o:0},
+  shopTab:"fac",reqs:[],spd:1,
+  zoom:1,px:0,py:0,loop:null
+};
+const gIds=()=>Object.keys(CD);
+const REGS={
+  "🇮🇷 ایران (پیشنهادی)":["iran"],
+  "خاورمیانه":["saudi","iraq","uae","turkey","israel","egypt","algeria","libya","sudan"],
+  "آسیا":["russia","china","india","japan","pakistan","kazakhstan","indonesia","ukraine","northkorea"],
+  "آمریکا":["usa","canada","brazil","mexico","argentina","venezuela"],
+  "اروپا":["uk","france","germany"],
+  "آفریقا":["nigeria","southafrica","ethiopia","congo"],
+  "اقیانوسیه":["australia"],
+};
+
+// ===== COUNTRY SELECT =====
+function showCS(){
+  document.getElementById("intro").classList.remove("active");
+  document.getElementById("csel").classList.add("active");
+  let h="";
+  for(let[r,ids]of Object.entries(REGS)){
+    const v=ids.filter(i=>CD[i]);if(!v.length)continue;
+    h+=`<div class="rl">${r}</div><div class="cg">`;
+    for(let id of v){
+      const c=CD[id];
+      const cls=c.special?"cc iran-card":"cc";
+      const badge=c.special?`<div style="font-size:.6rem;color:var(--g);margin-top:2px">⭐ کشور اصلی</div>`:"";
+      h+=`<div class="${cls}" onclick="startG('${id}');pCk()"><div class="cf">${c.flag}</div><div><div class="cn">${c.name}</div><div class="cd">💸${fR(c.money)} | 🛢️${fOil(c.oil)}</div><div class="cd">🛡️${c.def}${badge}</div></div></div>`;
+    }
+    h+="</div>";
+  }
+  document.getElementById("csList").innerHTML=h;
+}
+
+// ===== START GAME =====
+function startG(id){
+  G.pid=id;G.day=1;G.owned={};G.upg={};G.mis=0;G.jets=0;G.drones=0;G.defLvl=0;G.al=[];G.reqs=[];G.vault={m:0,o:0};
+  for(let cid of gIds()){
+    const b=CD[cid];
+    G.cs[cid]={
+      oil:b.oil,money:b.money,happy:b.happy,
+      mis:Math.floor(Math.random()*6)+1,
+      jets:Math.floor(Math.random()*4)+1,
+      drones:Math.floor(Math.random()*8)+2,
+      defLvl:Math.floor(Math.random()*3),
+      al:[],
+      rel:cid===id?"self":Math.random()>.65?"friend":Math.random()>.5?"neutral":"enemy",
+    };
+  }
+  // Iran special starting bonus if player chose Iran
+  if(id==="iran"){G.cs["iran"].mis+=5;G.cs["iran"].jets+=3;G.cs["iran"].drones+=8;}
+  document.getElementById("csel").classList.remove("active");
+  document.getElementById("game").classList.add("active");
+  initMap();colMap();updH();startLoop();
+  const special=id==="iran"?"🎯 ایران قدرتمندترین کشور بازی است! موفق باشید!":"";
+  notify(`${CD[id].flag} ${CD[id].name} انتخاب شد! 🌍 ${special}`);
+}
+
+// ===== HUD =====
+function updH(){
+  const s=G.cs[G.pid],p=CD[G.pid];
+  document.getElementById("hFl").textContent=p.flag;
+  document.getElementById("hNm").textContent=p.name;
+  document.getElementById("hMis").textContent="🚀"+G.mis;
+  document.getElementById("hJet").textContent="✈️"+G.jets;
+  document.getElementById("hDrn").textContent="🛸"+G.drones;
+  document.getElementById("hMon").textContent=fRial(s.money);
+  document.getElementById("hOil").textContent=fOil(s.oil);
+  document.getElementById("dayB").textContent="روز "+G.day;
+  const rb=document.getElementById("rbg"),ic=G.reqs.filter(r=>r.from).length;
+  if(ic>0){rb.style.display="flex";rb.textContent=ic;}else rb.style.display="none";
+}
+
+// ===== MAP =====
+function colMap(){
+  for(let id of gIds()){
+    const el=document.getElementById("c-"+id);if(!el)continue;
+    let f="#1a3a5c",s="#2d5a8e",sw="0.8",fi="";
+    if(id===G.pid){
+      if(id==="iran"){f="#c9a84c";s="#f0d080";sw="2";fi='filter="url(#glow2)"';}
+      else{f="#c9a84c";s="#f0d080";sw="1.5";}
+    }else{
+      const r=G.cs[id]?.rel;
+      if(r==="friend")f="#1a4a2c";else if(r==="enemy")f="#4a1a1a";
+      if(G.al.includes(id)){f="#1a5a3c";s="#22c55e";}
+    }
+    el.setAttribute("fill",f);el.setAttribute("stroke",s);el.setAttribute("stroke-width",sw);
+    if(fi)el.setAttribute("filter","url(#glow2)");else el.removeAttribute("filter");
+    el.onclick=()=>{shPop(id);pCk();};
+  }
+}
+function initMap(){
+  const w=document.getElementById("mapW");let drag=false,lx=0,ly=0,pinch=0;
+  w.addEventListener("touchstart",e=>{uAC();if(e.touches.length===2){pinch=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);return;}drag=true;lx=e.touches[0].clientX;ly=e.touches[0].clientY;},{passive:true});
+  w.addEventListener("touchmove",e=>{if(e.touches.length===2){const d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);dZ(d/pinch);pinch=d;return;}if(!drag)return;G.px+=e.touches[0].clientX-lx;G.py+=e.touches[0].clientY-ly;lx=e.touches[0].clientX;ly=e.touches[0].clientY;apT();},{passive:true});
+  w.addEventListener("touchend",()=>drag=false);
+  w.addEventListener("mousedown",e=>{drag=true;lx=e.clientX;ly=e.clientY;});
+  w.addEventListener("mousemove",e=>{if(!drag)return;G.px+=e.clientX-lx;G.py+=e.clientY-ly;lx=e.clientX;ly=e.clientY;apT();});
+  w.addEventListener("mouseup",()=>drag=false);
+  w.addEventListener("wheel",e=>{e.preventDefault();dZ(e.deltaY<0?1.15:0.87);},{passive:false});
+}
+function dZ(f){G.zoom=Math.min(6,Math.max(0.4,G.zoom*f));apT();}
+function rZ(){G.zoom=1;G.px=0;G.py=0;apT();}
+function apT(){const t=`translate(${G.px}px,${G.py}px) scale(${G.zoom})`;document.getElementById("msvg").style.transform=t;document.getElementById("htmlOv").style.transform=t;}
+function gSP(cx,cy){const svg=document.getElementById("msvg"),r=svg.getBoundingClientRect();return{x:cx*(r.width/1010),y:cy*(r.height/550)};}
+
+// ===== POPUP =====
+function shPop(id){
+  if(id===G.pid)return;
+  const b=CD[id];if(!b)return;
+  const s=G.cs[id],rel=s.rel;
+  const rt=rel==="friend"?'<span class="rff">✅ دوست</span>':rel==="enemy"?'<span class="rfe">⚔️ دشمن</span>':'<span class="rfn">🟡 خنثی</span>';
+  const isA=G.al.includes(id),aFull=G.al.length>=2&&!isA;
+  const iranBadge=id==="iran"?'<div style="color:var(--g);font-size:.7rem;margin-top:4px">⭐ کشور اصلی</div>':"";
+  document.getElementById("ppB").innerHTML=`
+    <div style="text-align:center;margin-bottom:14px">
+      <div style="font-size:2.4rem">${b.flag}</div>
+      <div style="font-family:Cinzel,serif;color:var(--g);font-size:1rem;margin-top:5px">${b.name}${iranBadge}</div>
+      <div style="font-size:.75rem;margin-top:3px">${rt}</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:.7rem;color:rgba(255,255,255,.65);margin-bottom:14px">
+      <div>💸 ${fRial(s.money)}</div><div>🛢️ ${fOil(s.oil)}</div>
+      <div>🚀 ${s.mis}</div><div>✈️ ${s.jets}</div>
+      <div>🛸 ${s.drones}</div><div>🛡️ سطح ${s.defLvl}</div>
+    </div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center">
+      <button class="db oil" onclick="sellOil('${id}');clPop()">🛢️ فروش نفت</button>
+      <button class="db trd" onclick="trade('${id}');clPop()">💱 تجارت</button>
+      ${isA?`<button class="db unaly" onclick="rmAl('${id}');clPop()">❌ لغو اتحاد</button>`:aFull?`<button class="db aly" style="opacity:.4">🤝(پر)</button>`:`<button class="db aly" onclick="addAl('${id}');clPop()">🤝 اتحاد</button>`}
+      <button class="db atk" onclick="atk('${id}');clPop()">⚔️ حمله</button>
+      <button class="db rq" onclick="opReq('${id}');clPop()">📨 درخواست</button>
+    </div>`;
+  document.getElementById("ov").classList.add("show");
+  document.getElementById("pp").classList.add("show");
+}
+function clPop(){document.getElementById("ov").classList.remove("show");document.getElementById("pp").classList.remove("show");}
+
+// ===== ACTIONS =====
+function sellOil(id){
+  const s=G.cs[G.pid],b=CD[id];
+  const oilAmt=500e6; // 500M liters
+  if(s.oil<oilAmt){notify("نفت کافی ندارید! (۵۰۰M لیتر لازم است)");return;}
+  const pm=G.owned["port"]?(1+(G.upg["port"]||0)*0.25+0.25):1;
+  const price=Math.floor((20e9+Math.random()*60e9)*pm);
+  s.oil-=oilAmt;s.money=Math.min(MAX_MONEY,s.money+price);
+  if(G.cs[id].rel==="enemy")G.cs[id].rel="neutral";
+  animShip(CD[G.pid].cx,CD[G.pid].cy,b.cx,b.cy);pShip();
+  notify(`${b.flag} فروش ۵۰۰M L نفت → +${fRial(price)}`);updH();colMap();
+}
+function trade(id){
+  const s=G.cs[G.pid],b=CD[id];
+  if(s.money<10e9){notify("پول کافی ندارید!");return;}
+  const gain=Math.floor(15e9+Math.random()*25e9);
+  s.money=Math.min(MAX_MONEY,s.money+gain);s.happy=Math.min(100,s.happy+2);pBuy();
+  notify(`${b.flag} تجارت → +${fRial(gain)}`);updH();
+}
+function addAl(id){
+  if(G.al.length>=2){notify("حداکثر ۲ اتحاد مجاز است!");return;}
+  G.al.push(id);G.cs[id].rel="friend";colMap();pBuy();
+  notify(`${CD[id].flag} ${CD[id].name} متحد شد! 🤝`);updH();
+}
+function rmAl(id){G.al=G.al.filter(x=>x!==id);G.cs[id].rel="neutral";colMap();notify(`اتحاد با ${CD[id].flag} لغو شد`);}
+function atk(id){
+  const b=CD[id];
+  if(G.mis===0&&G.jets===0&&G.drones===0){notify("ابتدا سلاح بخرید!");return;}
+  if(G.al.includes(id)){notify("نمی‌توانید به متحد حمله کنید!");return;}
+  let icon="🚀",sfn=pMis;
+  // Use what we have - limited to actual count
+  if(G.drones>0&&Math.random()<0.35){icon="🛸";sfn=pDrn;G.drones=Math.max(0,G.drones-1);}
+  else if(G.jets>0&&Math.random()<0.3){icon="✈️";sfn=pJet;G.jets=Math.max(0,G.jets-1);}
+  else if(G.mis>0){G.mis=Math.max(0,G.mis-1);}
+  else if(G.drones>0){icon="🛸";sfn=pDrn;G.drones=Math.max(0,G.drones-1);}
+  else if(G.jets>0){icon="✈️";sfn=pJet;G.jets=Math.max(0,G.jets-1);}
+  sfn();pWar();
+  animMis(CD[G.pid].cx,CD[G.pid].cy,b.cx,b.cy,icon,()=>{
+    const dr=[0,0.35,0.55,0.7,0.85,0.92][Math.min(G.cs[id].defLvl,5)];
+    if(Math.random()<dr){notify(`${b.flag} پدافند ${b.name} حمله را خنثی کرد!`);}
+    else{
+      const dmg=Math.floor((20e9+Math.random()*80e9)*(icon==="☄️"?2:1));
+      G.cs[id].money=Math.max(0,G.cs[id].money-dmg);
+      G.cs[id].rel="enemy";
+      notify(`${b.flag} ${b.name} آسیب دید! -${fRial(dmg)} ⚔️`);
+    }
+    updH();colMap();
+  });
+}
+
+// ===== SEND REQUEST =====
+function opReq(id){
+  const b=CD[id];
+  document.getElementById("ppB").innerHTML=`
+    <div style="text-align:center;margin-bottom:12px">
+      <div style="font-size:2rem">${b.flag}</div>
+      <div style="font-family:Cinzel,serif;color:var(--g);font-size:.95rem;margin-top:4px">درخواست به ${b.name}</div>
+    </div>
+    <div class="rf">
+      <div class="rft">نوع درخواست:</div>
+      <select class="rsl" id="rqT">
+        <option value="buy_oil">🛢️ خرید نفت از آن‌ها</option>
+        <option value="sell_oil">💰 فروش نفت به آن‌ها</option>
+        <option value="money_oil">🔄 پول در ازای نفت</option>
+        <option value="ally">🤝 درخواست اتحاد</option>
+        <option value="gift">🎁 پیشنهاد همکاری</option>
+      </select>
+      <div class="rft">مقدار (میلیون لیتر / میلیارد تومان):</div>
+      <input class="ri2" id="rqA" type="number" value="500" min="100">
+      <button class="rsb" onclick="subReq('${id}');pCk()">📨 ارسال درخواست</button>
+    </div>`;
+  document.getElementById("ov").classList.add("show");
+  document.getElementById("pp").classList.add("show");
+}
+function subReq(id){
+  const type=document.getElementById("rqT").value;
+  const amt=parseInt(document.getElementById("rqA").value)||200;
+  const b=CD[id],s=G.cs[G.pid];
+  const oilAmt=amt*1e6,monAmt=amt*1e9;
+  if(type==="buy_oil"){
+    const pay=Math.floor(oilAmt*0.03);
+    if(s.money<pay){notify("پول کافی ندارید!");clPop();return;}
+    setTimeout(()=>{if(Math.random()<0.62){s.oil+=oilAmt;s.money=Math.max(0,s.money-pay);G.cs[id].oil=Math.max(0,G.cs[id].oil-oilAmt);G.cs[id].money=Math.min(MAX_MONEY,G.cs[id].money+pay);updH();notify(`${b.flag} قبول کرد! +${fOil(oilAmt)} ✅`);}else notify(`${b.flag} رد کرد ❌`);},2500);
+  }else if(type==="sell_oil"){
+    const get=Math.floor(oilAmt*0.028);
+    if(s.oil<oilAmt){notify("نفت کافی ندارید!");clPop();return;}
+    setTimeout(()=>{if(Math.random()<0.6){s.oil-=oilAmt;s.money=Math.min(MAX_MONEY,s.money+get);updH();notify(`${b.flag} خرید! +${fRial(get)} ✅`);}else notify(`${b.flag} رد کرد ❌`);},2500);
+  }else if(type==="money_oil"){
+    if(s.money<monAmt){notify("پول کافی ندارید!");clPop();return;}
+    setTimeout(()=>{if(Math.random()<0.55){s.money-=monAmt;s.oil+=oilAmt*2;updH();notify(`${b.flag} قبول کرد! ✅`);}else notify(`${b.flag} رد کرد ❌`);},2500);
+  }else if(type==="ally"){
+    if(G.al.length>=2){notify("ظرفیت اتحاد پر!");clPop();return;}
+    setTimeout(()=>{if(Math.random()<0.52){addAl(id);notify(`${b.flag} اتحاد قبول شد! 🤝`);}else notify(`${b.flag} رد کرد ❌`);},2000);
+  }else if(type==="gift"){
+    const gift=Math.floor(Math.random()*30e9+10e9);
+    setTimeout(()=>{if(Math.random()<0.7){s.money=Math.min(MAX_MONEY,s.money+gift);updH();notify(`${b.flag} پیشنهاد قبول! +${fRial(gift)} 🎁`);}else notify(`${b.flag} رد کرد ❌`);},2000);
+  }
+  clPop();notify(`📨 درخواست ارسال شد به ${b.flag} ${b.name}`);
+}
+
+// ===== SHOP =====
+function swSh(t){G.shopTab=t;document.querySelectorAll(".stab").forEach((b,i)=>b.classList.toggle("active",["fac","wpn","def"][i]===t));rSh();}
+function rSh(){
+  const items=SHOP[G.shopTab];let h="";
+  for(let it of items){
+    const ow=G.owned[it.id],ul=G.upg[it.id]||0,mu=it.upg?.length||0,canU=ow&&ul<mu,nu=canU?it.upg[ul]:null;
+    const s=G.cs[G.pid];const ca=s.money>=(ow?nu?.price||0:it.price);
+    if(!ow){
+      h+=`<div class="si"><div class="sic">${it.icon}</div><div style="flex:1"><div class="sin">${it.name}</div><div class="sid">${it.desc}</div><div class="sip">💸 ${fRial(it.price)}</div></div><button class="bb2" ${ca?"":"disabled"} onclick="buyIt('${it.id}');pCk()">${ca?"خرید":"کم"}</button></div>`;
+    }else if(canU){
+      h+=`<div class="si upg"><div class="sic">${it.icon}</div><div style="flex:1"><div class="sin">${it.name}</div><div class="sid">${nu.desc}</div><div class="sil">⬆️ سطح ${ul+1}→${ul+2} | ${fRial(nu.price)}</div></div><button class="ub" ${ca?"":"disabled"} onclick="upgIt('${it.id}');pCk()">ارتقا</button></div>`;
+    }else{
+      h+=`<div class="si owned"><div class="sic">${it.icon}</div><div style="flex:1"><div class="sin">${it.name}</div><div class="sid">${it.desc}</div><div class="sio">✅ حداکثر سطح${ul>0?" ("+ul+"×)":""}</div></div></div>`;
+    }
+  }
+  document.getElementById("shIt").innerHTML=h;
+}
+function buyIt(id){
+  const all=[...SHOP.fac,...SHOP.wpn,...SHOP.def],it=all.find(x=>x.id===id);if(!it||G.owned[id])return;
+  const s=G.cs[G.pid];if(s.money<it.price){notify("پول کافی ندارید!");return;}
+  s.money-=it.price;G.owned[id]=true;
+  if(it.mis)G.mis+=it.mis;if(it.jets)G.jets+=it.jets;if(it.drones)G.drones+=it.drones;
+  if(it.dlvl)G.defLvl=Math.max(G.defLvl,it.dlvl);
+  if(it.id==="mall")s.happy=Math.min(100,s.happy+10);
+  if(it.id==="hospital")s.happy=Math.min(100,s.happy+15);
+  pBuy();notify(`${it.icon} ${it.name} خریداری شد!`);updH();rSh();
+}
+function upgIt(id){
+  const all=[...SHOP.fac,...SHOP.wpn,...SHOP.def],it=all.find(x=>x.id===id);if(!it||!G.owned[id])return;
+  const lvl=G.upg[id]||0;if(lvl>=it.upg.length)return;
+  const u=it.upg[lvl],s=G.cs[G.pid];if(s.money<u.price){notify("پول کافی ندارید!");return;}
+  s.money-=u.price;G.upg[id]=lvl+1;
+  if(u.mis)G.mis+=u.mis;if(u.jets)G.jets+=u.jets;if(u.drones)G.drones+=u.drones;if(u.dlvl)G.defLvl=Math.max(G.defLvl,u.dlvl);
+  pBuy();notify(`⬆️ ${it.name} ارتقا → سطح ${lvl+2}!`);updH();rSh();
+}
+
+// ===== DIPLOMACY =====
+function rDiplo(){
+  const ids=gIds().filter(i=>i!==G.pid);let h="";
+  for(let id of ids){
+    const b=CD[id];if(!b)continue;
+    const s=G.cs[id],rel=s.rel,rc=rel==="friend"?"rff":rel==="enemy"?"rfe":"rfn",rt=rel==="friend"?"✅ دوست":rel==="enemy"?"⚔️ دشمن":"🟡 خنثی";
+    const isA=G.al.includes(id),aF=G.al.length>=2&&!isA;
+    h+=`<div class="di"><div class="dfl">${b.flag}</div><div style="flex:1"><div class="din">${b.name}${isA?" 🤝":""}</div><div class="drl ${rc}">${rt}</div></div><div class="dbs"><button class="db oil" onclick="sellOil('${id}');pCk()">🛢️</button><button class="db trd" onclick="trade('${id}');pCk()">💱</button>${isA?`<button class="db unaly" onclick="rmAl('${id}');rDiplo();pCk()">❌</button>`:aF?"":`<button class="db aly" onclick="addAl('${id}');rDiplo();pCk()">🤝</button>`}<button class="db atk" onclick="atk('${id}');pCk()">⚔️</button><button class="db rq" onclick="opReq('${id}');pCk()">📨</button></div></div>`;
+  }
+  document.getElementById("diploB").innerHTML=h;
+}
+
+// ===== STATS + VAULT =====
+function rStats(){
+  const s=G.cs[G.pid],at=G.al.map(i=>CD[i]?.flag||"").join(" ")||"ندارید";
+  const pct=Math.min(100,s.money/MAX_MONEY*100);
+  document.getElementById("statsB").innerHTML=`
+    <div class="vb">
+      <div class="vt">🏦 صندوق ذخیره</div>
+      <div class="vr"><div class="vi">💸 پول ذخیره<div class="vs">${fRial(G.vault.m)}</div></div><div class="vbs"><button class="vbn vd" onclick="vA('m','d');pCk()">واریز</button><button class="vbn vw" onclick="vA('m','w');pCk()">برداشت</button></div></div>
+      <div class="vr"><div class="vi">🛢️ نفت ذخیره<div class="vs">${fOil(G.vault.o)}</div></div><div class="vbs"><button class="vbn vd" onclick="vA('o','d');pCk()">واریز</button><button class="vbn vw" onclick="vA('o','w');pCk()">برداشت</button></div></div>
+    </div>
+    <div class="sg">
+      <div class="sc2"><div class="sci">💸</div><div class="scv" style="color:var(--g)">${fRial(s.money)}</div><div class="scl">پول (تومان)</div></div>
+      <div class="sc2"><div class="sci">🛢️</div><div class="scv" style="color:#60a5fa">${fOil(s.oil)}</div><div class="scl">نفت</div></div>
+      <div class="sc2"><div class="sci">😊</div><div class="scv" style="color:var(--gr)">${Math.floor(s.happy)}%</div><div class="scl">رضایت</div></div>
+      <div class="sc2"><div class="sci">🚀</div><div class="scv">${G.mis}</div><div class="scl">موشک</div></div>
+      <div class="sc2"><div class="sci">✈️</div><div class="scv">${G.jets}</div><div class="scl">جت</div></div>
+      <div class="sc2"><div class="sci">🛸</div><div class="scv">${G.drones}</div><div class="scl">پهباد</div></div>
+    </div>
+    <div class="bw"><div class="bl2"><span>💸 سقف پول</span><span>${pct.toFixed(0)}٪</span></div><div class="bt"><div class="bf" style="width:${pct}%;background:linear-gradient(90deg,var(--g),var(--g2))"></div></div></div>
+    <div class="bw"><div class="bl2"><span>🛢️ نفت</span><span>${fOil(s.oil)}</span></div><div class="bt"><div class="bf" style="width:${Math.min(100,s.oil/1e12*100)}%;background:linear-gradient(90deg,#2563eb,#60a5fa)"></div></div></div>
+    <div class="bw"><div class="bl2"><span>😊 رضایت</span><span>${Math.floor(s.happy)}%</span></div><div class="bt"><div class="bf" style="width:${s.happy}%;background:linear-gradient(90deg,#16a34a,#4ade80)"></div></div></div>
+    <div style="margin-top:12px;text-align:center;font-size:.7rem;color:rgba(255,255,255,.5)">🤝 ${at} | 🛡️ ${["ندارید","پایه","S-300","گنبد","S-400"][Math.min(G.defLvl,4)]} | روز ${G.day}</div>`;
+}
+function vA(type,act){
+  const s=G.cs[G.pid];
+  if(type==="m"){const a=50e9;if(act==="d"){if(s.money<a){notify("پول کافی!");return;}s.money-=a;G.vault.m+=a;notify(`💸 ${fRial(a)} واریز شد`);}else{if(G.vault.m<a){notify("صندوق خالی!");return;}G.vault.m-=a;s.money=Math.min(MAX_MONEY,s.money+a);notify(`💸 ${fRial(a)} برداشت`);}}
+  else{const a=500e6;if(act==="d"){if(s.oil<a){notify("نفت کافی!");return;}s.oil-=a;G.vault.o+=a;notify(`🛢️ ${fOil(a)} واریز`);}else{if(G.vault.o<a){notify("صندوق خالی!");return;}G.vault.o-=a;s.oil+=a;notify(`🛢️ ${fOil(a)} برداشت`);}}
+  updH();rStats();
+}
+
+// ===== REQUESTS PANEL =====
+function rReqs(){
+  const inc=G.reqs.filter(r=>r.from),out=G.reqs.filter(r=>!r.from);
+  let h="";
+  if(inc.length===0&&out.length===0){h='<div style="text-align:center;color:rgba(255,255,255,.4);padding:20px;font-size:.8rem">📭 درخواستی ندارید</div>';}
+  G.reqs.forEach((r,i)=>{
+    if(r.from){const b=CD[r.from];h+=`<div class="ri"><div class="rih"><div class="rfl">${b?.flag||"🌍"}</div><div class="rfm">${b?.name||"کشور"}</div></div><div class="rm">${r.msg}</div><div class="rbs"><button class="ra" onclick="accR(${i});pCk()">✅ قبول</button><button class="rj" onclick="rejR(${i});pCk()">❌ رد</button></div></div>`;}
+    else h+=`<div class="ri" style="opacity:.5"><div class="rm" style="font-size:.68rem">📤 ${r.msg}</div></div>`;
+  });
+  document.getElementById("reqB").innerHTML=h;
+}
+function accR(i){
+  const r=G.reqs[i],s=G.cs[G.pid];
+  if(r.oil&&r.oil>0)s.oil+=r.oil;if(r.oil&&r.oil<0)s.oil=Math.max(0,s.oil+r.oil);
+  if(r.money&&r.money>0)s.money=Math.min(MAX_MONEY,s.money+r.money);if(r.money&&r.money<0)s.money=Math.max(0,s.money+r.money);
+  if(r.isA&&G.al.length<2)addAl(r.from);
+  notify("✅ درخواست قبول شد!");pBuy();G.reqs.splice(i,1);updH();rReqs();
+}
+function rejR(i){G.reqs.splice(i,1);notify("❌ رد شد");rReqs();updH();}
+
+// ===== SETTINGS =====
+function rSett(){
+  document.getElementById("settB").innerHTML=`
+    <div class="sti">🔊 صدا</div>
+    <div class="sro"><div><div class="sla">صدای بازی</div><div class="sde">همه افکت‌های صوتی</div></div><button class="tg ${SFX.on?"on":""}" id="sfxTg" onclick="togSFX()"></button></div>
+    <div class="sro"><div><div class="sla">میزان صدا: <span id="volPct">${Math.round(SFX.vol*100)}</span>٪</div></div><input class="vsl" type="range" min="0" max="100" value="${Math.round(SFX.vol*100)}" oninput="SFX.vol=this.value/100;document.getElementById('volPct').textContent=this.value"></div>
+    <div class="sti">⚡ سرعت بازی</div>
+    <div class="sro"><div><div class="sla">سرعت روز</div><div class="sde">⏸ = متوقف | ۱× = عادی | ۲× = سریع</div></div><div style="display:flex;gap:6px"><button class="spb ${G.spd===0?"active":""}" onclick="setSp(0);rSett()">⏸</button><button class="spb ${G.spd===1?"active":""}" onclick="setSp(1);rSett()">۱×</button><button class="spb ${G.spd===2?"active":""}" onclick="setSp(2);rSett()">۲×</button></div></div>
+    <div class="sti">📱 درباره</div>
+    <div class="sro" style="flex-direction:column;align-items:flex-start;gap:4px">
+      <div class="sla">World Power v3.0 🇮🇷</div>
+      <div class="sde">روز ${G.day} | ${CD[G.pid]?.name||""} | متحدین: ${G.al.length}/2</div>
+      <div class="sde">سقف پول: ${fRial(MAX_MONEY)}</div>
+    </div>`;
+}
+function togSFX(){SFX.on=!SFX.on;if(SFX.on)pCk();document.getElementById("sfxTg")?.classList.toggle("on",SFX.on);}
+
+// ===== TABS =====
+let opPl=null;
+function swTab(t){
+  clPl();document.querySelectorAll(".nb").forEach(b=>b.classList.remove("active"));
+  document.getElementById("tab-"+t)?.classList.add("active");
+  if(t==="map")return;
+  const pm={shop:"shopPl",diplo:"diploPl",stats:"statsPl",req:"reqPl",settings:"settPl"};
+  if(pm[t]){if(t==="shop")rSh();if(t==="diplo")rDiplo();if(t==="stats")rStats();if(t==="req")rReqs();if(t==="settings")rSett();opPl2(pm[t]);}
+}
+function opPl2(id){document.getElementById(id).classList.add("open");opPl=id;}
+function clPl(){if(opPl){document.getElementById(opPl).classList.remove("open");opPl=null;}document.querySelectorAll(".nb").forEach(b=>b.classList.remove("active"));document.getElementById("tab-map")?.classList.add("active");}
+
+// ===== ANIMATIONS =====
+function animMis(x1,y1,x2,y2,icon,cb){
+  const ov=document.getElementById("htmlOv"),p1=gSP(x1,y1),p2=gSP(x2,y2),el=document.createElement("div");
+  el.style.cssText="position:absolute;font-size:1rem;pointer-events:none;z-index:50;";el.textContent=icon;ov.appendChild(el);
+  let s=0,st=38;const iv=setInterval(()=>{const t=s/st;el.style.left=(p1.x+(p2.x-p1.x)*t-8)+"px";el.style.top=(p1.y+(p2.y-p1.y)*t-Math.sin(t*Math.PI)*60-8)+"px";s++;if(s>st){clearInterval(iv);el.remove();if(cb)cb();}},38);
+}
+function animShip(x1,y1,x2,y2){
+  const ov=document.getElementById("htmlOv"),p1=gSP(x1,y1),p2=gSP(x2,y2),el=document.createElement("div");
+  el.style.cssText="position:absolute;font-size:1.1rem;pointer-events:none;z-index:45;";el.textContent="🚢";ov.appendChild(el);
+  let s=0,st=65;const iv=setInterval(()=>{const t=s/st;el.style.left=(p1.x+(p2.x-p1.x)*t-10)+"px";el.style.top=(p1.y+(p2.y-p1.y)*t+Math.sin(t*Math.PI)*38-10)+"px";s++;if(s>st){clearInterval(iv);el.remove();}},48);
+}
+
+// ===== NOTIFICATION =====
+function notify(msg){const el=document.getElementById("nf");el.textContent=msg;el.classList.add("show");setTimeout(()=>el.classList.remove("show"),3200);}
+
+// ===== GAME LOOP =====
+// Slow speeds: 1x = 12s per day, 2x = 6s per day
+const SPDS={1:12000,2:6000};
+function startLoop(){restLoop();}
+function restLoop(){if(G.loop)clearInterval(G.loop);if(G.spd===0||!G.pid)return;G.loop=setInterval(tick,SPDS[G.spd]);}
+function setSp(s){G.spd=s;["sp0","sp1","sp2"].forEach((id,i)=>document.getElementById(id)?.classList.toggle("active",[0,1,2][i]===s));restLoop();}
+
+function tick(){
+  G.day++;const s=G.cs[G.pid];
+  // Oil production with upgrades
+  const om=G.owned["oilwell"]?(G.upg["oilwell"]?[2,3,5][Math.min(G.upg["oilwell"]-1,2)]:2):1;
+  const pm=G.owned["port"]?(1+(G.upg["port"]||0)*0.25+0.25):1;
+  s.oil+=2e9*om; // 2B liters per day base
+  // Income
+  const um=G.owned["university"]?(1+(G.upg["university"]||0)*0.2+0.2):1;
+  if(G.owned["port"])s.money=Math.min(MAX_MONEY,s.money+15e9*pm);
+  if(G.owned["university"])s.money=Math.min(MAX_MONEY,s.money+20e9*um);
+  s.money=Math.min(MAX_MONEY,s.money+5e9+G.al.length*8e9);
+  // Happy
+  s.happy=Math.max(20,s.happy-0.05);
+  if(G.owned["mall"])s.happy=Math.min(100,s.happy+0.04*(1+(G.upg["mall"]||0)*0.5));
+  if(G.owned["hospital"])s.happy=Math.min(100,s.happy+0.04*(1+(G.upg["hospital"]||0)*0.5));
+  // AI
+  if(G.day%2===0)aiTick();
+  if(G.day%15===0)genAIReq();
+  updH();if(G.day%10===0)colMap();
+}
+
+function aiTick(){
+  const ids=gIds().filter(i=>i!==G.pid);
+  for(let id of ids){
+    const s=G.cs[id];
+    s.oil+=1.5e9+Math.random()*1e9;
+    s.money=Math.min(MAX_MONEY*1.5,s.money+Math.random()*15e9);
+    // Trade between AIs
+    const p=ids[Math.floor(Math.random()*ids.length)];
+    if(p!==id){s.money=Math.min(MAX_MONEY*1.5,s.money+Math.random()*8e9);G.cs[p].money=Math.min(MAX_MONEY*1.5,G.cs[p].money+Math.random()*5e9);}
+    // AI alliances (max 2, not with player's allies)
+    if(s.al.length<2&&Math.random()<0.01){
+      const c=ids[Math.floor(Math.random()*ids.length)];
+      if(c!==id&&!s.al.includes(c)&&!G.al.includes(c)){s.al.push(c);G.cs[c].al=G.cs[c].al||[];if(G.cs[c].al.length<2)G.cs[c].al.push(id);}
+    }
+    // AI attack (NOT allies, limited by weapon count)
+    if((s.mis>0||s.jets>0||s.drones>0)&&Math.random()<0.008){
+      const ens=ids.filter(i=>G.cs[i].rel==="enemy"&&!s.al.includes(i)&&!G.al.includes(i));
+      if(ens.length>0){
+        const tg=ens[Math.floor(Math.random()*ens.length)];
+        if(s.mis>0)s.mis--;else if(s.jets>0)s.jets--;else if(s.drones>0)s.drones--;
+        const dr=[0,0.35,0.55,0.7,0.85,0.92][Math.min(G.cs[tg].defLvl,5)];
+        if(Math.random()>dr){G.cs[tg].money=Math.max(0,G.cs[tg].money-Math.random()*30e9);if(tg===G.pid){notify(`⚠️ ${CD[id].flag} ${CD[id].name} به شما حمله کرد!`);pWar();}}
+      }
+    }
+    // AI buy weapons occasionally
+    if(s.money>150e9&&Math.random()<0.01){s.money-=80e9;s.mis+=4;}
+    if(s.money>300e9&&Math.random()<0.008){s.money-=150e9;s.drones+=6;}
+    s.happy=Math.max(20,Math.min(100,s.happy+(Math.random()-.5)*0.4));
+  }
+}
+
+function genAIReq(){
+  const ids=gIds().filter(i=>i!==G.pid);
+  if(Math.random()<0.5){
+    const from=ids[Math.floor(Math.random()*ids.length)],b=CD[from];if(!b)return;
+    const t=Math.random();let req={from};
+    const qty=Math.floor(Math.random()*4+1)*100;
+    if(t<0.28){const p=Math.floor(qty*28e6);req.msg=`${b.flag} ${b.name} می‌خواهد ${qty*100}M L نفت بخرد → ${fRial(p)}`;req.oil=-qty*100e6;req.money=p;}
+    else if(t<0.52){const p=Math.floor(qty*25e6);req.msg=`${b.flag} ${b.name} پیشنهاد فروش ${qty*100}M L نفت → ${fRial(p)}`;req.oil=qty*100e6;req.money=-p;}
+    else if(t<0.72){const g=Math.floor(Math.random()*50e9+20e9);req.msg=`${b.flag} ${b.name} پیشنهاد همکاری اقتصادی → هدیه ${fRial(g)}`;req.money=g;req.oil=0;}
+    else if(t<0.88){req.msg=`${b.flag} ${b.name} درخواست اتحاد نظامی دارد`;req.isA=true;req.money=0;req.oil=0;}
+    else{const mis=Math.floor(Math.random()*5+3);const p=Math.floor(mis*25e9);req.msg=`${b.flag} ${b.name} پیشنهاد فروش ${mis} موشک → ${fRial(p)}`;req.extraMis=mis;req.money=-p;}
+    G.reqs.push(req);updH();
+  }
+}
+</script>
+</body>
+</html>
